@@ -28,12 +28,12 @@ function demo()
     
     % Nordland spring dataset
     ds.name = 'spring';
-    ds.imagePath = '../datasets/nordland/64x32-grayscale-1fps/spring';    
+    ds.imagePath = '../datasets/nordland-gray/spring';
     ds.prefix='images-';
     ds.extension='.png';
     ds.suffix='';
-    ds.imageSkip = 100;     % use every n-nth image
-    ds.imageIndices = 1:ds.imageSkip:35700;    
+    ds.imageSkip = 1;     % use every n-nth image
+    ds.imageIndices = 22684:ds.imageSkip:28354;    
     ds.savePath = 'results';
     ds.saveFile = sprintf('%s-%d-%d-%d', ds.name, ds.imageIndices(1), ds.imageSkip, ds.imageIndices(end));
     
@@ -47,7 +47,7 @@ function demo()
 
     % Nordland winter dataset
     ds.name = 'winter';
-    ds.imagePath = '../datasets/nordland/64x32-grayscale-1fps/winter';       
+    ds.imagePath = '../datasets/nordland-gray/winter';
     ds.saveFile = sprintf('%s-%d-%d-%d', ds.name, ds.imageIndices(1), ds.imageSkip, ds.imageIndices(end));
     % ds.crop=[5 1 64 32];
     ds.crop=[];
@@ -67,8 +67,8 @@ function demo()
               
     
 %% now process the dataset
-   
     results = openSeqSLAM(params);          
+    
     
 %% show some results
     
@@ -81,7 +81,7 @@ function demo()
     % The LARGER the score, the WEAKER the match.
     
     m = results.matches(:,1);
-    thresh=0.9;  % you can calculate a precision-recall plot by varying this threshold
+    thresh=1.0;  % you can calculate a precision-recall plot by varying this threshold
     m(results.matches(:,2)>thresh) = NaN;  % remove the weakest matches
     plot(m,'.');      % ideally, this would only be the diagonal
     title('Matchings');                 

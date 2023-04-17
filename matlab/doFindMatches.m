@@ -18,7 +18,8 @@
 % You should have received a copy of the GNU General Public License
 % along with OpenSeqSLAM.  If not, see <http://www.gnu.org/licenses/>.     
 function results = doFindMatches(results, params)       
-     
+    global top1_match;
+    
     filename = sprintf('%s/matches-%s-%s%s.mat', params.savePath, params.dataset(1).saveFile, params.dataset(2).saveFile, params.saveSuffix);  
      
     if params.matching.load && exist(filename, 'file')
@@ -35,11 +36,16 @@ function results = doFindMatches(results, params)
         % make sure ds is dividable by two
         params.matching.ds = params.matching.ds + mod(params.matching.ds,2);
         
+        top1_match = 0;
+        
         DD = results.DD;
-        parfor N = params.matching.ds/2+1 : size(results.DD,2)-params.matching.ds/2
+        for N = params.matching.ds/2+1 : size(results.DD,2)-params.matching.ds/2
             matches(N,:) = findSingleMatch(DD, N, params);
             %   waitbar(N / size(results.DD,2), h_waitbar);
         end
+        
+        top1_acc = top1_match/(size(results.DD,2)-params.matching.ds/2);
+        display(sprintf('Top-1 Accuracy: %f', top1_acc));
                
         % save it
         if params.matching.save
@@ -53,7 +59,7 @@ end
 
 %%
 function match = findSingleMatch(DD, N, params)
-
+    global top1_match;
 
     % We shall search for matches using velocities between
     % params.matching.vmin and params.matching.vmax.
@@ -98,5 +104,13 @@ function match = findSingleMatch(DD, N, params)
     not_window = setxor(1:length(score), window);
     min_value_2nd = min(score(not_window));
     
-    match = [min_idx + params.matching.ds/2; min_value / min_value_2nd];    
+    match = [min_idx + params.matching.ds/2; min_value / min_value_2nd];
+    
+    % Print current image and its matching result
+    display(sprintf('Current Image: %i Matching Result: %i', N, match(1)));
+    
+    % Check if current image 
+    if N == match(1)
+        top1_match = top1_match + 1;
+    end
 end
