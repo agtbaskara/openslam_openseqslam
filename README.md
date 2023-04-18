@@ -10,8 +10,10 @@ algorithm published by Milford and Wyeth at ICRA12 [1]. SeqSLAM performs place
 recognition by matching sequences of images. 
 
 Quick start guide: 
- - Download the Nordland dataset:
-     cd datasets/norland; ./getDataset.bash; 
+ - Download the Nordland dataset: 
+    ```
+    cd datasets/norland; ./getDataset.bash;
+    ```
  - start Matlab and run demo.m from within the matlab directory
 
 
