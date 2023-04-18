@@ -26,13 +26,13 @@ function demo()
     % start with default parameters
     params = defaultParameters();    
     
-    % Nordland spring dataset
-    ds.name = 'spring';
-    ds.imagePath = '../datasets/nordland-gray/spring';
+    % Reference dataset
+    ds.name = 'summer';
+    ds.imagePath = '../datasets/nordland-gray/summer';
     ds.prefix='images-';
     ds.extension='.png';
     ds.suffix='';
-    ds.imageSkip = 1;     % use every n-nth image
+    ds.imageSkip = 1; % use every n-nth image
     ds.imageIndices = 22684:ds.imageSkip:28354;    
     ds.savePath = 'results';
     ds.saveFile = sprintf('%s-%d-%d-%d', ds.name, ds.imageIndices(1), ds.imageSkip, ds.imageIndices(end));
@@ -42,20 +42,20 @@ function demo()
     %ds.crop=[1 1 60 32];  % x0 y0 x1 y1  cropping will be done AFTER resizing!
     ds.crop=[];
     
-    spring=ds;
+    reference_ds=ds;
 
 
-    % Nordland winter dataset
+    % Target dataset
     ds.name = 'winter';
     ds.imagePath = '../datasets/nordland-gray/winter';
     ds.saveFile = sprintf('%s-%d-%d-%d', ds.name, ds.imageIndices(1), ds.imageSkip, ds.imageIndices(end));
     % ds.crop=[5 1 64 32];
     ds.crop=[];
     
-    winter=ds;        
+    target_ds=ds;        
 
-    params.dataset(1) = spring;
-    params.dataset(2) = winter;
+    params.dataset(1) = reference_ds;
+    params.dataset(2) = target_ds;
 
     % load old results or re-calculate?
     params.differenceMatrix.load = 0;
